@@ -9,7 +9,7 @@ require 'segment/analytics/response'
 require 'segment/analytics/logging'
 require 'segment/analytics/test_queue'
 
-module Segment
+module SegmentIO
   class Analytics
     # Initializes a new instance of {Segment::Analytics::Client}, to which all
     # method calls are proxied.
@@ -20,7 +20,7 @@ module Segment
     #   server and are stubbed to be successful.
     def initialize(options = {})
       Transport.stub = options[:stub] if options.has_key?(:stub)
-      @client = Segment::Analytics::Client.new options
+      @client = SegmentIO::Analytics::Client.new options
     end
 
     def method_missing(message, *args, &block)
