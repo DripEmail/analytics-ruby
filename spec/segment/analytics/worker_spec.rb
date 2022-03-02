@@ -4,13 +4,13 @@ module SegmentIO
   class Analytics
     describe Worker do
       before do
-        SegmentIO:Analytics::Transport.stub = true
+        SegmentIO::Analytics::Transport.stub = true
       end
 
       describe '#init' do
         it 'accepts string keys' do
           queue = Queue.new
-          worker = SegmentIO:Analytics::Worker.new(queue,
+          worker = SegmentIO::Analytics::Worker.new(queue,
                                                   'secret',
                                                   'batch_size' => 100)
           batch = worker.instance_variable_get(:@batch)
@@ -20,36 +20,36 @@ module SegmentIO
 
       describe '#run' do
         before :all do
-          SegmentIO:Analytics::Defaults::Request::BACKOFF = 0.1
+          SegmentIO::Analytics::Defaults::Request::BACKOFF = 0.1
         end
 
         after :all do
-          SegmentIO:Analytics::Defaults::Request::BACKOFF = 30.0
+          SegmentIO::Analytics::Defaults::Request::BACKOFF = 30.0
         end
 
         it 'does not error if the request fails' do
           expect do
-            SegmentIO:Analytics::Transport
+            SegmentIO::Analytics::Transport
               .any_instance
               .stub(:send)
-              .and_return(SegmentIO:Analytics::Response.new(-1, 'Unknown error'))
+              .and_return(SegmentIO::Analytics::Response.new(-1, 'Unknown error'))
 
             queue = Queue.new
             queue << {}
-            worker = SegmentIO:Analytics::Worker.new(queue, 'secret')
+            worker = SegmentIO::Analytics::Worker.new(queue, 'secret')
             worker.run
 
             expect(queue).to be_empty
 
-            SegmentIO:Analytics::Transport.any_instance.unstub(:send)
+            SegmentIO::Analytics::Transport.any_instance.unstub(:send)
           end.to_not raise_error
         end
 
         it 'executes the error handler if the request is invalid' do
-          SegmentIO:Analytics::Transport
+          SegmentIO::Analytics::Transport
             .any_instance
             .stub(:send)
-            .and_return(SegmentIO:Analytics::Response.new(400, 'Some error'))
+            .and_return(SegmentIO::Analytics::Response.new(400, 'Some error'))
 
           status = error = nil
           on_error = proc do |yielded_status, yielded_error|
@@ -67,7 +67,7 @@ module SegmentIO
           sleep 0.1 # First give thread time to spin-up.
           sleep 0.01 while worker.is_requesting?
 
-          SegmentIO:Analytics::Transport.any_instance.unstub(:send)
+          SegmentIO::Analytics::Transport.any_instance.unstub(:send)
 
           expect(queue).to be_empty
           expect(status).to eq(400)
@@ -118,22 +118,22 @@ module SegmentIO
       describe '#is_requesting?' do
         it 'does not return true if there isn\'t a current batch' do
           queue = Queue.new
-          worker = SegmentIO:Analytics::Worker.new(queue, 'testsecret')
+          worker = SegmentIO::Analytics::Worker.new(queue, 'testsecret')
 
           expect(worker.is_requesting?).to eq(false)
         end
 
         it 'returns true if there is a current batch' do
-          SegmentIO:Analytics::Transport
+          SegmentIO::Analytics::Transport
             .any_instance
             .stub(:send) {
               sleep(0.2)
-              SegmentIO:Analytics::Response.new(200, 'Success')
+              SegmentIO::Analytics::Response.new(200, 'Success')
             }
 
           queue = Queue.new
           queue << Requested::TRACK
-          worker = SegmentIO:Analytics::Worker.new(queue, 'testsecret')
+          worker = SegmentIO::Analytics::Worker.new(queue, 'testsecret')
 
           worker_thread = Thread.new { worker.run }
           eventually { expect(worker.is_requesting?).to eq(true) }
@@ -141,7 +141,7 @@ module SegmentIO
           worker_thread.join
           expect(worker.is_requesting?).to eq(false)
 
-          SegmentIO:Analytics::Transport.any_instance.unstub(:send)
+          SegmentIO::Analytics::Transport.any_instance.unstub(:send)
         end
       end
     end

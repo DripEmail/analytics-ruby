@@ -6,9 +6,9 @@ require 'segment/analytics/utils'
 module SegmentIO
   class Analytics
     class Worker
-      include SegmentIO:Analytics::Utils
-      include SegmentIO:Analytics::Defaults
-      include SegmentIO:Analytics::Logging
+      include SegmentIO::Analytics::Utils
+      include SegmentIO::Analytics::Defaults
+      include SegmentIO::Analytics::Logging
 
       # public: Creates a new worker
       #

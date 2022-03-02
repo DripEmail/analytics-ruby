@@ -3,7 +3,7 @@ require 'spec_helper'
 module SegmentIO
   class Analytics
     describe Analytics do
-      let(:analytics) { SegmentIO:Analytics.new :write_key => WRITE_KEY, :stub => true }
+      let(:analytics) { SegmentIO::Analytics.new :write_key => WRITE_KEY, :stub => true }
 
       describe '#track' do
         it 'errors without an event' do
@@ -117,13 +117,13 @@ module SegmentIO
       end
 
       describe '#respond_to?' do
-        it 'responds to all public instance methods of SegmentIO:Analytics::Client' do
-          expect(analytics).to respond_to(*SegmentIO:Analytics::Client.public_instance_methods(false))
+        it 'responds to all public instance methods of SegmentIO::Analytics::Client' do
+          expect(analytics).to respond_to(*SegmentIO::Analytics::Client.public_instance_methods(false))
         end
       end
 
       describe '#method' do
-        SegmentIO:Analytics::Client.public_instance_methods(false).each do |public_method|
+        SegmentIO::Analytics::Client.public_instance_methods(false).each do |public_method|
           it "returns a Method object with '#{public_method}' as argument" do
             expect(analytics.method(public_method).class).to eq(Method)
           end
@@ -132,7 +132,7 @@ module SegmentIO
 
       describe '#test_queue' do
         context 'when not in mode' do
-          let(:analytics) { SegmentIO:Analytics.new :write_key => WRITE_KEY, :stub => true, :test => true }
+          let(:analytics) { SegmentIO::Analytics.new :write_key => WRITE_KEY, :stub => true, :test => true }
 
           it 'returns TestQueue' do
             expect(analytics.test_queue).to be_a(TestQueue)
@@ -146,7 +146,7 @@ module SegmentIO
         end
 
         context 'when not in test mode' do
-          let(:analytics) { SegmentIO:Analytics.new :write_key => WRITE_KEY, :stub => true, :test => false }
+          let(:analytics) { SegmentIO::Analytics.new :write_key => WRITE_KEY, :stub => true, :test => false }
 
           it 'errors when not in test mode' do
             expect(analytics.instance_variable_get(:@test)).to be_falsey

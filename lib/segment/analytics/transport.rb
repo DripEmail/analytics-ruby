@@ -10,9 +10,9 @@ require 'json'
 module SegmentIO
   class Analytics
     class Transport
-      include SegmentIO:Analytics::Defaults::Request
-      include SegmentIO:Analytics::Utils
-      include SegmentIO:Analytics::Logging
+      include SegmentIO::Analytics::Defaults::Request
+      include SegmentIO::Analytics::Utils
+      include SegmentIO::Analytics::Logging
 
       def initialize(options = {})
         options[:host] ||= HOST
@@ -22,7 +22,7 @@ module SegmentIO
         @path = options[:path] || PATH
         @retries = options[:retries] || RETRIES
         @backoff_policy =
-          options[:backoff_policy] || SegmentIO:Analytics::BackoffPolicy.new
+          options[:backoff_policy] || SegmentIO::Analytics::BackoffPolicy.new
 
         http = Net::HTTP.new(options[:host], options[:port])
         http.use_ssl = options[:ssl]
