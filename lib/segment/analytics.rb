@@ -11,11 +11,11 @@ require 'segment/analytics/test_queue'
 
 module SegmentIO
   class Analytics
-    # Initializes a new instance of {Segment::Analytics::Client}, to which all
+    # Initializes a new instance of {SegmentIO::Analytics::Client}, to which all
     # method calls are proxied.
     #
     # @param options includes options that are passed down to
-    #   {Segment::Analytics::Client#initialize}
+    #   {SegmentIO::Analytics::Client#initialize}
     # @option options [Boolean] :stub (false) If true, requests don't hit the
     #   server and are stubbed to be successful.
     def initialize(options = {})
